@@ -30,12 +30,16 @@ class ProdutosVC: UIViewController{
         //esconde as linhas nao usadas da table view
         self.produtosTableView.tableFooterView = UIView(frame: .zero)
         
+        self.produtosTableView.register(UINib(nibName: "ProdutoTableViewCell", bundle: nil), forCellReuseIdentifier: "ProdutoTableViewCell")
+        
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.configTableView()
     }
+    
     private func numeroItensPorCategoria(section: Int) -> Int{
         
         var arrayProdutosFiltrados:[Produto ] = []
@@ -46,7 +50,7 @@ class ProdutosVC: UIViewController{
             }
             
         }
-
+        
         return arrayProdutosFiltrados.count
     }
     func loadArrayFiltrado(section: Int) -> [Produto]{
@@ -70,22 +74,17 @@ extension ProdutosVC: UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = produtosTableView.dequeueReusableCell(withIdentifier: "ProdutoCell", for: indexPath)
+        let cell: ProdutoTableViewCell? =
+            tableView.dequeueReusableCell(withIdentifier: "ProdutoTableViewCell", for: indexPath) as? ProdutoTableViewCell
         
         let arrayProdutosFiltrado: [Produto] = self.loadArrayFiltrado(section: indexPath.section)
         
-        //           var arrayProdutosFiltrados:[Produto] = []
-        //            for value in self.produtos{
-        //                if  value.categoria.rawValue == indexPath.section{
-        //                    arrayProdutosFiltrados.append(value)
-        //                }
-        //            }
-        cell.textLabel?.text = arrayProdutosFiltrado[indexPath.row].nome
-        cell.detailTextLabel?.text = arrayProdutosFiltrado[indexPath.row].preco
-        return cell
+        cell?.setup(produto: arrayProdutosFiltrado[indexPath.row])
+        
+        return cell ?? UITableViewCell()
     }
-      
-  
+    
+    
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return categorias[section]
