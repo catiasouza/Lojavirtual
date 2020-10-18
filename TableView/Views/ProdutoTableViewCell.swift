@@ -19,8 +19,19 @@ class ProdutoTableViewCell: UITableViewCell {
         
         self.tituloLabel.text = _produto.nome
         self.subTituloLabel.text = _produto.preco
-        
-        self.imageProduto.image = UIImage(named: "eletro")
+       
+        self.imageProduto.image = self.loadImage(categoria: _produto.categoria)
+    }
+    
+    private func loadImage(categoria: Categorias)->UIImage?{
+        switch categoria {
+        case .lazer:
+            return UIImage(named: "lazer")
+        case .eletronicos:
+            return UIImage(named: "eletronico")
+        case .eletrodomestico:
+            return UIImage(named: "eletro")
+        }
     }
     
     override func awakeFromNib() {
